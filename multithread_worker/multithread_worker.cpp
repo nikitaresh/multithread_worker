@@ -76,7 +76,7 @@ MultithreadWorkerArguments* MultithreadWorker::getWorkerArguments()
     argsQueueMutex.lock();
     if (!argsQueue.empty())
     {
-        arguments = argsQueue.back();
+        arguments = argsQueue.front();
         argsQueue.pop();
     }
     argsQueueMutex.unlock();
