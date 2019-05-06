@@ -10,7 +10,7 @@
 class MultithreadWorkerArguments
 {
 public:
-    virtual bool isWorkerExit() const = 0;
+    virtual bool isValidArgument() const = 0;
 
     virtual ~MultithreadWorkerArguments();
 };

@@ -35,7 +35,8 @@ bool MultithreadWorker::run(int numThreads,
     argsQueue = argumentQueue;
 
     numWorkingThreads = numThreads;
-    for (int index = 0; index < numWorkingThreads; ++index)
+    const int numTnreadsForLoop = numThreads;
+    for (int index = 0; index < numTnreadsForLoop; ++index)
     {
         std::thread worker(&MultithreadWorker::threadWorker, this, threadFunction);
         worker.detach();
@@ -56,9 +57,13 @@ void MultithreadWorker::threadWorker(std::function<void(const MultithreadWorkerA
 {
     while (true)
     {
-        MultithreadWorkerArguments* arguments = getWorkerArguments();
-        if (arguments == nullptr || arguments->isWorkerExit()) {
+        if (argsQueue.empty()) {
             break;
+        }
+
+        MultithreadWorkerArguments* arguments = getWorkerArguments();
+        if (arguments == nullptr || !arguments->isValidArgument()) {
+            continue;
         }
 
         threadFunction(arguments);

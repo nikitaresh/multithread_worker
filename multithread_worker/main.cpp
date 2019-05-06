@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <multithread_worker.h>
+#include <iostream>
 
 
 class TimeArgument : public MultithreadWorkerArguments
@@ -17,9 +18,9 @@ public:
         sleepForTime = other.sleepForTime;
     }
 
-    virtual bool isWorkerExit() const
+    virtual bool isValidArgument() const
     {
-        return sleepForTime == std::chrono::milliseconds(0);
+        return sleepForTime > std::chrono::milliseconds(0);
     }
 
 public:
@@ -28,10 +29,6 @@ public:
 
 void executeTask(const MultithreadWorkerArguments* ptrAbstractArguments)
 {
-    if (ptrAbstractArguments == nullptr || ptrAbstractArguments->isWorkerExit()) {
-        return;
-    }
-
     const TimeArgument* ptrArguments = 
         dynamic_cast<const TimeArgument*>(ptrAbstractArguments);
     if (ptrArguments == nullptr) {
